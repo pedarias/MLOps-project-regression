@@ -1,0 +1,13 @@
+numpy
+pandas
+tensorflow[and-cuda]
+seaborn
+matplotlib
+fastapi
+uvicorn
+mlflow
+dvc
+evidently
+scikit-learn
+joblib
+pydantic
