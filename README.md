@@ -269,7 +269,7 @@ Do seu computador local, abra um navegador e navegue para:
 `http://your-instance-public-dns`
 
 Você deve ver o endpoint root da sua aplicação FastAPI!
-![Demonstração Terminal](./assets/swageraws-ezgif.com-censor.gif)
+![Demonstração Endpoint Público](./assets/swageraws-ezgif.com-speed.gif)
 
 ## 🧰 Ferramentas de Controle de Versão e Monitoramento
 
