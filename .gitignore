@@ -3,3 +3,4 @@ __pycache__/
 mlruns/
 .dvc/
 myfirstkeypair.pem
+.pytest_cache
