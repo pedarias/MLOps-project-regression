@@ -2,3 +2,4 @@ __pycache__/
 *.pyc
 mlruns/
 .dvc/
+myfirstkeypair.pem

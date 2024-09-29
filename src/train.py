@@ -57,7 +57,7 @@ def train_model():
         print(f"Teste de perda (Mean Absolute Error): {loss}")
 
         # Salvar o modelo
-        model.save('models/dnn_model.keras')
+        model.save('models/dnn_model.keras', include_optimizer=False)
 
         # Logar o modelo no MLflow
         mlflow.log_metric('test_loss', loss)

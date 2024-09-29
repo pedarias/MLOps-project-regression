@@ -1,8 +1,8 @@
 numpy
 pandas
-tensorflow[and-cuda]
 seaborn
 matplotlib
+tensorflow[and-cuda]
 fastapi
 uvicorn
 mlflow
