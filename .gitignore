@@ -4,3 +4,5 @@ mlruns/
 .dvc/
 myfirstkeypair.pem
 .pytest_cache
+assets/awsserver.gif
+assets/swageraws.gif

@@ -2,6 +2,10 @@
 
 ![Arquitetura](.assets/MLOpsarquitecture.webp)
 
+## Objetivo
+Eu resolvi desenvolver este projeto para fins de estudos em MLOps e apenas isso. A ideia foi reproduzir um tutorial da documentação oficial do TensorFlow implementando tecnologias de MLOps para o deploy de um modelo na nuvem. 
+
+
 ## 📈 Descrição do Projeto
 
 Este projeto implementa um modelo de regressão para prever a eficiência de combustível (`MPG`) de automóveis dos anos 1970 e 1980, utilizando o clássico conjunto de dados **Auto MPG**. O objetivo é demonstrar como construir, treinar e implantar um modelo de aprendizado de máquina de ponta a ponta, integrando práticas de MLOps para garantir uma gestão eficiente de dados, experimentos e implantação.
@@ -25,6 +29,7 @@ Este projeto utiliza o conjunto de dados [**Auto MPG**](https://archive.ics.uci.
 ```plaintext
 .
 ├── data/
+├── assets/
 ├── mlruns/
 ├── models/
 │   └── dnn_model.keras
@@ -52,8 +57,6 @@ Este projeto utiliza o conjunto de dados [**Auto MPG**](https://archive.ics.uci.
   - **`data_ingestion.py`**: Script para baixar e salvar os dados.
   - **`data_preprocessing.py`**: Script para pré-processar os dados.
   - **`train.py`**: Script para treinar o modelo de regressão.
-  - **`evaluate.py`**: Script para avaliar o modelo treinado.
-  - **`predict.py`**: Script para realizar previsões com o modelo.
 - **`app.py`**: Aplicação FastAPI para servir o modelo como um serviço web.
 - **`requirements.txt`**: Lista de dependências Python necessárias para o projeto.
 - **`Dockerfile`**: Configuração para containerizar a aplicação usando Docker.
@@ -81,8 +84,9 @@ a. Usando Docker
 `sudo docker run -d -p 80:80 mlops-regression-app`
 
 - Acessar a Aplicação:
+Abra o navegador e vá para http://54.233.4.29 para ver a aplicação em execução.
 
-    Abra o navegador e vá para http://seu-endereco-EC2 para ver a aplicação em execução.
+> **Nota**: Pelo fato de eu ter criado uma conta 'Free Tier' na AWS, no momento em que você acessar o aplicativo pode não estar mais disponível na nuvem.
 
 b. Sem Docker
 
@@ -106,7 +110,7 @@ pip install -r requirements.txt
 
 - Acessar a Aplicação:
 
-    Abra o navegador e vá para http://seu-endereco-EC2 para ver a aplicação em execução.
+Abra o navegador e vá para http://0.0.0.0/docs para ver a aplicação com Swagger em execução.
 
 3. Treinar o Modelo
 
@@ -129,7 +133,7 @@ Este script também registra o experimento no MLflow e salva o modelo treinado e
 
 - Usando Swagger UI:
 
-Acesse http://seu-endereco-EC2/docs para utilizar a interface interativa do Swagger e testar o endpoint /predict.
+Acesse http://0.0.0.0/docs para utilizar a interface interativa do Swagger e testar o endpoint /predict.
 
 - Usando cURL:
 
@@ -159,34 +163,113 @@ curl -X POST "http://seu-endereco-EC2/predict" \
 ```
 
 ![Demonstração do Aplicativo](./assets/swagger.gif)
-## 📦 Deploy na AWS ECS (Optional)
 
-Para implantar a aplicação na AWS ECS, siga os passos abaixo:
+## 📦 Deploy na AWS ECS (Opcional)
 
-    Criar um Repositório no Docker Hub:
-        Faça login no Docker Hub e crie um repositório para a sua aplicação.
+### Visão Geral
 
-    Taguear a Imagem Docker:
+Considerando que você está utilizando o AWS Free Tier, vamos implantar nossa aplicação em uma instância EC2. Por favor, note:
+
+- **Suporte a GPU:** O AWS Free Tier não inclui instâncias com GPU. Se sua aplicação requer suporte a GPU, você precisará utilizar uma instância EC2 com GPU, o que acarretará custos adicionais.
+- **Implantação CPU-Only:** Se sua aplicação puder rodar sem suporte a GPU, você pode implantá-la em uma instância elegível para o Free Tier (por exemplo, `t2.micro`).
+
+### Opção 1: Implantação em uma Instância EC2 do Free Tier (Somente CPU)
+
+#### Passo 1: Lançar uma Instância EC2
+
+1. **Faça login no AWS Management Console:**
+    - Acesse [AWS Management Console](https://console.aws.amazon.com/).
+
+2. **Navegue até o Painel do EC2:**
+    - Clique em **"Serviços"** no topo e selecione **"EC2"** em Compute.
+
+3. **Clique em "Launch Instance":**
+    - No Painel do EC2, clique em **"Launch Instance"**.
+
+4. **Escolher uma Amazon Machine Image (AMI):**
+    - Selecione **"Ubuntu Server 24.04 LTS (HVM), SSD Volume Type"** (64-bit x86).
+    - Certifique-se de que a AMI é elegível para o Free Tier.
+
+5. **Escolher um Tipo de Instância:**
+    - Selecione `t2.micro` (elegível para o Free Tier).
+
+6. **Configurar Detalhes da Instância:**
+    - Aceite as configurações padrão ou ajuste conforme necessário.
+    - Certifique-se de que **Auto-assign Public IP** está habilitado.
+
+7. **Adicionar Armazenamento:**
+    - O padrão de **8 GB** é suficiente, mas você pode aumentá-lo até 16 GB se necessário.
+
+8. **Adicionar Tags (Opcional):**
+    - Você pode etiquetar sua instância para identificação.
+
+9. **Configurar Grupo de Segurança:**
+    - Crie um novo grupo de segurança ou use um existente.
+    - Adicione as seguintes regras de entrada:
+        - **SSH (porta 22):** Seu endereço IP.
+        - **HTTP (porta 80):** De qualquer lugar (`0.0.0.0/0`).
+
+10. **Revisar e Lançar:**
+    - Clique em **"Review and Launch"**.
+    - Revise suas configurações e clique em **"Launch"**.
+    - Selecione ou crie um novo par de chaves para acesso SSH.
+    - Baixe o par de chaves e armazene-o com segurança.
+
+#### Passo 2: Conectar-se à Sua Instância EC2
+
+Use SSH para se conectar à sua instância:
 
 ```bash
-
-docker tag mlops-regression-app seu-usuario-docker/mlops-regression-app
+chmod 400 /path/to/your/key.pem
+ssh -i /path/to/your/key.pem ubuntu@your-instance-public-dns
 ```
-
-Fazer Push da Imagem para o Docker Hub:
-
+![Demonstração Terminal](./assets/awsserver-ezgif.com-censor.gif)
+#### Passo 3: **Na sua instância** EC2, instale o Docker:
 ```bash
+# Atualizar listas de pacotes
+sudo apt-get update
 
-    docker push seu-usuario-docker/mlops-regression-app
+# Instalar pacotes pré-requisitos
+sudo apt-get install -y apt-transport-https ca-certificates curl software-properties-common
+
+# Adicionar a chave GPG oficial do Docker
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+
+# Adicionar o repositório do Docker
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu focal stable"
+
+# Instalar o Docker
+sudo apt-get update
+sudo apt-get install -y docker-ce
+
+# Adicionar o usuário 'ubuntu' ao grupo 'docker' (opcional)
+sudo usermod -aG docker ubuntu
 ```
-- Configurar o AWS ECS:
-    Acesse o console do AWS ECS.
-    Crie uma nova Cluster.
-    Defina um Task Definition usando a imagem Docker que você enviou para o Docker Hub.
-    Configure os serviços e as políticas de rede conforme necessário.
 
-- Implantar a Aplicação:
-    Após configurar o ECS, a aplicação será implantada automaticamente na nuvem AWS, tornando-a acessível através de um endpoint público.
+#### Passo 4: Transferir Seu Código da Aplicação para a Instância EC2
+Do seu computador local:
+```bash
+scp -i /path/to/your/key.pem -r /path/to/your/application ubuntu@your-instance-public-dns:/home/ubuntu/
+```
+
+#### Passo 5: Construir Sua Imagem Docker na Instância EC2
+Navegue para o diretório da sua aplicação:
+
+`cd /home/ubuntu/your-application-directory`
+
+Construa a imagem:
+`sudo docker build -t mlops-regression-app .`
+
+#### Passo 6: Executar Seu Container Docker
+Execute o container, mapeando a porta 80:
+`sudo docker run -d -p 80:80 mlops-regression-app`
+
+#### Passo 7: Testar Sua Aplicação
+Do seu computador local, abra um navegador e navegue para:
+`http://your-instance-public-dns`
+
+Você deve ver o endpoint root da sua aplicação FastAPI!
+![Demonstração Terminal](./assets/swageraws-ezgif.com-censor.gif)
 
 ## 🧰 Ferramentas de Controle de Versão e Monitoramento
 
@@ -194,16 +277,14 @@ Fazer Push da Imagem para o Docker Hub:
 - MLflow: Ferramenta para rastreamento e registro de experimentos, permitindo monitorar o desempenho dos modelos ao longo do tempo.
 
 ## 📊 Modelo .keras
-
 O modelo .keras (dnn_model.keras) é uma rede neural profunda construída e treinada usando o TensorFlow e Keras. Este modelo foi projetado para resolver um problema de regressão, onde o objetivo é prever a eficiência de combustível (MPG) de automóveis com base em atributos como cilindros, deslocamento, potência, peso, aceleração, ano do modelo e origem.
-### 🧠 Estrutura do Modelo
 
+### 🧠 Estrutura do Modelo
 - Camada de Normalização: Responsável por normalizar as entradas, garantindo que os dados estejam em uma escala adequada para o treinamento.
 - Camadas Densas (Fully Connected): Duas camadas densas com 64 neurônios e função de ativação ReLU, seguidas por uma camada de saída com um único neurônio para a previsão contínua.
 - Compilação: O modelo utiliza a função de perda de erro absoluto médio (mean_absolute_error) e o otimizador Adam com uma taxa de aprendizado de 0.001.
 
 ### 📄 Como o Modelo Foi Treinado
-
 O treinamento do modelo foi realizado utilizando o script train.py, que segue os seguintes passos:
 
 - Carregamento dos Dados: Os dados são carregados a partir dos arquivos CSV pré-processados.
@@ -216,14 +297,13 @@ O treinamento do modelo foi realizado utilizando o script train.py, que segue os
 - Registro no MLflow: As métricas de avaliação são logadas no MLflow para análise posterior.
 
 ## 🔗 Recursos Adicionais
-
 Para mais informações sobre o processo de construção e treinamento de modelos de regressão com Keras e TensorFlow, consulte o [tutorial oficial do TensorFlow](https://www.tensorflow.org/tutorials/keras/regression) para mais informações.
-📝 Contribuição
 
+## 📝 Contribuição
 Contribuições são bem-vindas! Por favor, abra uma issue ou envie um pull request para melhorias ou correções.
-📄 Licença
 
-Este projeto está licenciado sob a licença MIT. Veja o arquivo LICENSE para mais detalhes.
-📫 Contato
+## 📄 Licença
+Esse projeto está licenciado sob a licença Apache. Veja o arquivo LICENSE para mais detalhes.
 
+## 📫 Contato
 Para mais informações ou dúvidas, entre em contato através do GitHub Issues ou me envie um e-mail.
