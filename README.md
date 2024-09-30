@@ -1,10 +1,9 @@
 # MLOps Regression Project
 
-![Arquitetura](.assets/MLOpsarquitecture.webp)
+![Arquitetura](.assets/MLOpsarquitecture.jpeg)
 
 ## Objetivo
-Eu resolvi desenvolver este projeto para fins de estudos em MLOps e apenas isso. A ideia foi reproduzir um tutorial da documentação oficial do TensorFlow implementando tecnologias de MLOps para o deploy de um modelo na nuvem. 
-
+Eu resolvi desenvolver este projeto para fins de estudos em MLOps e apenas isso. A ideia foi reproduzir um tutorial da documentação oficial do TensorFlow implementando tecnologias de MLOps para o deploy de um modelo de Deep Learning na nuvem.
 
 ## 📈 Descrição do Projeto
 
@@ -12,7 +11,7 @@ Este projeto implementa um modelo de regressão para prever a eficiência de com
 
 ## 📚 Contexto
 
-Em um problema de regressão, o objetivo é prever o resultado de um valor contínuo, como um preço ou uma probabilidade. Em contraste, em um problema de classificação, o objetivo é selecionar uma classe a partir de uma lista de classes (por exemplo, determinar se uma imagem contém uma maçã ou uma laranja).
+Em um problema de regressão, o objetivo é prever o resultado de um valor contínuo, como um preço ou uma probabilidade. Em contraste, com um problema de classificação, onde o objetivo é selecionar uma classe a partir de uma lista de classes (por exemplo, determinar se uma imagem contém uma maçã ou uma laranja).
 
 Este projeto utiliza o conjunto de dados [**Auto MPG**](https://archive.ics.uci.edu/dataset/9/auto+mpg) e demonstra como construir modelos para prever a eficiência de combustível de automóveis. Para isso, os modelos recebem uma descrição de diversos automóveis desse período, incluindo atributos como cilindros, deslocamento, potência (`horsepower`), peso, aceleração, ano do modelo e origem.
 
@@ -126,7 +125,7 @@ Abra o navegador e vá para http://0.0.0.0/docs para ver a aplicação com Swagg
 
 `python src/train.py`
 
-Este script também registra o experimento no MLflow e salva o modelo treinado em ``models/dnn_model.keras``.
+Este script também registra o experimento no MLflow e salva o modelo treinado em ``models/dnn_model.keras``. Depois de executar ``train.py`` podemos acessar a interface do mlflow localmente digitando ``mlflow ui`` no terminal. Veja um exemplo da interface no gif abaixo.
 ![MLFlow UI](./assets/mlflowui.gif)
 
 4. Testar o Endpoint de Previsão
@@ -168,12 +167,13 @@ curl -X POST "http://seu-endereco-EC2/predict" \
 
 ### Visão Geral
 
-Considerando que você está utilizando o AWS Free Tier, vamos implantar nossa aplicação em uma instância EC2. Por favor, note:
+Estou utilizando o AWS Free Tier, portanto, vamos implantar nossa aplicação em uma instância EC2. Por favor, note:
 
-- **Suporte a GPU:** O AWS Free Tier não inclui instâncias com GPU. Se sua aplicação requer suporte a GPU, você precisará utilizar uma instância EC2 com GPU, o que acarretará custos adicionais.
-- **Implantação CPU-Only:** Se sua aplicação puder rodar sem suporte a GPU, você pode implantá-la em uma instância elegível para o Free Tier (por exemplo, `t2.micro`).
+- **Suporte a GPU:** O AWS Free Tier não inclui instâncias com GPU. Para uma aplicação que requer suporte a GPU, você precisará utilizar uma instância EC2 com GPU, o que acarretará custos adicionais.
+- **Implantação CPU-Only:** Como a nossa aplicação pode rodar sem suporte a GPU, podemos implantá-la em uma instância elegível para o Free Tier (por exemplo, `t2.micro`).
+Para mais info acesse [O que é o Amazon EC2?](https://docs.aws.amazon.com/pt_br/AWSEC2/latest/UserGuide/concepts.html).
 
-### Opção 1: Implantação em uma Instância EC2 do Free Tier (Somente CPU)
+### Implantação em uma Instância EC2 do Free Tier (Somente CPU)
 
 #### Passo 1: Lançar uma Instância EC2
 
@@ -273,8 +273,8 @@ Você deve ver o endpoint root da sua aplicação FastAPI!
 
 ## 🧰 Ferramentas de Controle de Versão e Monitoramento
 
-- DVC (Data Version Control): Utilizado para versionar e gerenciar os dados do projeto, facilitando a reprodução de experimentos.
-- MLflow: Ferramenta para rastreamento e registro de experimentos, permitindo monitorar o desempenho dos modelos ao longo do tempo.
+- **[DVC (Data Version Control)](https://dvc.org/):** Utilizado para versionar e gerenciar os dados do projeto, facilitando a reprodução de experimentos.
+- **[MLflow](https://mlflow.org/):** Ferramenta para rastreamento e registro de experimentos, permitindo monitorar o desempenho dos modelos ao longo do tempo.
 
 ## 📊 Modelo .keras
 O modelo .keras (dnn_model.keras) é uma rede neural profunda construída e treinada usando o TensorFlow e Keras. Este modelo foi projetado para resolver um problema de regressão, onde o objetivo é prever a eficiência de combustível (MPG) de automóveis com base em atributos como cilindros, deslocamento, potência, peso, aceleração, ano do modelo e origem.
@@ -307,3 +307,13 @@ Esse projeto está licenciado sob a licença Apache. Veja o arquivo LICENSE para
 
 ## 📫 Contato
 Para mais informações ou dúvidas, entre em contato através do GitHub Issues ou me envie um e-mail.
+##### Pedro Henrique Arias Oliveira:
+<p align="center"> 
+  <a href="https://www.linkedin.com/in/pedroarias92/" target="_blank">
+    <img align="center" src="https://logosmarcas.net/wp-content/uploads/2020/04/Linkedin-Logo.png" height="30" />
+  </a> 
+  <a href="mailto:pedro.oliveira@sistemafiep.org.br" target="_blank">
+    <img align="center" src="https://w7.pngwing.com/pngs/995/259/png-transparent-microsoft-outlook-logo-outlook-com-microsoft-outlook-email-microsoft-office-365-outlook-miscellaneous-blue-text.png" height="30" />
+  </a>
+</p>
+html=True)
