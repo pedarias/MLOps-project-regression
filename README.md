@@ -1,4 +1,6 @@
 # MLOps Regression Project
+[![GitHub](https://img.shields.io/badge/GitHub-code-blue?style=flat&logo=github&logoColor=white&color=red)](https://github.com/pedarias/MLOps-project-regression) [![Medium](https://img.shields.io/badge/Medium-view_article-green?style=flat&logo=medium&logoColor=white&color=green)](https://medium.com/@pedroarias92/mlops-regression-project-c3574870ee61)
+
 
 ![Arquitetura](./assets/MLOpsarquitecture.jpeg)
 
