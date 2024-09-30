@@ -1,6 +1,6 @@
 # MLOps Regression Project
 
-![Arquitetura](.assets/MLOpsarquitecture.jpeg)
+![Arquitetura](./assets/MLOpsarquitecture.jpeg)
 
 ## Objetivo
 Eu resolvi desenvolver este projeto para fins de estudos em MLOps e apenas isso. A ideia foi reproduzir um tutorial da documentação oficial do TensorFlow implementando tecnologias de MLOps para o deploy de um modelo de Deep Learning na nuvem.
