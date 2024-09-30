@@ -316,4 +316,3 @@ Para mais informações ou dúvidas, entre em contato através do GitHub Issues 
     <img align="center" src="https://w7.pngwing.com/pngs/995/259/png-transparent-microsoft-outlook-logo-outlook-com-microsoft-outlook-email-microsoft-office-365-outlook-miscellaneous-blue-text.png" height="30" />
   </a>
 </p>
-html=True)
